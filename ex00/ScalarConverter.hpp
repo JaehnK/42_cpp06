@@ -11,23 +11,23 @@
 class ScalarConverter
 {
     private:
-        std::string     _input;
-        unsigned int    demicalLength;
-        bool            isFloat;
-        bool            isInf;
-        bool            isNan;
+        static unsigned int    demicalLength;
+        static bool            isFloat;
+        static bool            isInf;
+        static bool            isNan;
 
         ScalarConverter();
-    public:
-        ScalarConverter(std::string input);
         ~ScalarConverter();
 
-        bool    validateInput();
-        void    printChar();
-        void    printInt();
-        void    printFloat();
-        void    printDouble();
-        void    printValues();
+        static bool    validateInput(std::string input);
+        static void    printChar(std::string input);
+        static void    printInt(std::string input);
+        static void    printFloat(std::string input);
+        static void    printDouble(std::string input);
+    
+    public:
+
+        static void    printValues(std::string input);
 
         class NotNumberInputException:public std::exception
         {

@@ -2,14 +2,14 @@ C++ = c++
 CPP_FLAGS = -Wall -Werror -Wextra -std=c++98 -g
 
 SRCS =	main.cpp \
-		ScalarConverter.cpp \
+		Serializer.cpp \
 
-HEADR =	ScalarConverter.hpp
+HEADR =	Serializer.hpp
 
 
 OBJS = $(SRCS:.cpp=.o)
 
-NAME = convert
+NAME = serializer
 
 all: $(NAME)
 

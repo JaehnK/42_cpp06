@@ -1,66 +1,62 @@
 #include "ScalarConverter.hpp"
 
+unsigned int    ScalarConverter::demicalLength = 0;
+bool            ScalarConverter::isFloat = false;
+bool            ScalarConverter::isInf = false;
+bool            ScalarConverter::isNan = false;
+
 ScalarConverter::ScalarConverter()
 {}
-
-ScalarConverter::ScalarConverter(std::string input)
-{
-    this->_input = input;
-    this->demicalLength = 0;
-    this->isFloat = false;
-    this->isInf = false;
-    this->isNan = false;
-}
 
 ScalarConverter::~ScalarConverter()
 {}
 
-bool    ScalarConverter::validateInput()
+bool    ScalarConverter::validateInput(std::string input)
 {
     int dot = 0;
     int numCnt = 0;
 
-    if ((this->_input == "-inff") || (this->_input == "inff"))
+    if ((input == "-inff") || (input == "inff"))
     {
-        this->isInf = true;
+        isInf = true;
         return (true);
     }
-    else if ((this->_input == "-inf") || (this->_input == "inf"))
+    else if ((input == "-inf") || (input == "inf"))
     {
-        this->isInf = true;
-        return (true);
-    }
-
-    if (this->_input == "nan" || this->_input == "nanf")
-    {
-        if ((int) this->_input.length() == 4)
-            this->isFloat = true;
-        this->isNan = true;
+        isInf = true;
         return (true);
     }
 
-    for (int i = 0; i < (int) this->_input.length(); i++)
+    if (input == "nan" || input == "nanf")
     {
-        if (isdigit(this->_input[i]) == 0)
+        if ((int) input.length() == 4)
+            isFloat = true;
+        isNan = true;
+        return (true);
+    }
+
+    for (int i = 0; i < (int) input.length(); i++)
+    {
+        if (isdigit(input[i]) == 0)
         {
-            if (i == 0 &&( this->_input[i] == '-' || this->_input[i] == '+'))
+            if (i == 0 &&( input[i] == '-' || input[i] == '+'))
             {
-                if (this->_input.length() == 1)
+                if (input.length() == 1)
                     return (false);
                 else
                     continue ;
             }
-            else if (i == (int) this->_input.length() - 1)
+            else if (i == (int) input.length() - 1)
             {
-                if (this->_input[i] != 'f')
+                if (input[i] != 'f')
                     return (false);
-                if (this->_input[i - 1] == '.')
+                if (input[i - 1] == '.')
                     return (false);
-                if (!numCnt || !this->demicalLength)
+                if (!numCnt || !demicalLength)
                     return (false);
-                this->isFloat = true;
+                isFloat = true;
             }
-            else if (this->_input[i] == '.' && !dot)
+            else if (input[i] == '.' && !dot)
             {
                 dot++;
                 continue ;
@@ -73,16 +69,16 @@ bool    ScalarConverter::validateInput()
         if (!dot)
             numCnt++;
         else
-            this->demicalLength++;
+            demicalLength++;
     }
     return (true);
 }
 
-void    ScalarConverter::printChar()
+void    ScalarConverter::printChar(std::string input)
 {
-    double value = strtod(this->_input.c_str(), NULL);
+    double value = strtod(input.c_str(), NULL);
 
-    if (this->isInf || this->isNan)
+    if (isInf || isNan)
         std::cout << "char: impossible" << std::endl;
     else if (static_cast<char> (value) < 32 || static_cast<char> (value) > 127)
         std::cout << "char: Non displayable" << std::endl;
@@ -90,11 +86,11 @@ void    ScalarConverter::printChar()
         std::cout << "char: " <<  static_cast<char> (value) << std::endl;
 }
 
-void    ScalarConverter::printInt()
+void    ScalarConverter::printInt(std::string input)
 {
-    double value = strtod(this->_input.c_str(), NULL);
+    double value = strtod(input.c_str(), NULL);
 
-    if (this->isInf || this->isNan)
+    if (isInf || isNan)
         std::cout << "int: impossible" << std::endl;
     else if (value > INT_MAX)
         std::cout << "int: exceed INT_MAX" << std::endl;
@@ -104,45 +100,44 @@ void    ScalarConverter::printInt()
         std::cout << "int: " << static_cast<int> (value) << std::endl;
 }
 
-void    ScalarConverter::printFloat()
+void    ScalarConverter::printFloat(std::string input)
 {
     int     precisionLen;
     double  value;
     
-    if (this->isFloat)
-        precisionLen = this->demicalLength - 1;
-    else if (this->demicalLength == 0)
+    if (isFloat)
+        precisionLen = demicalLength - 1;
+    else if (demicalLength == 0)
         precisionLen = 1;
     else
-        precisionLen = this->demicalLength;
-    value = strtod(this->_input.c_str(), NULL);
+        precisionLen = demicalLength;
+    value = strtod(input.c_str(), NULL);
     
     std::cout << "float: " << std::fixed << std::setprecision(precisionLen) \
               << static_cast<float> (value);
-    if (this->isFloat || precisionLen)
+    if (isFloat || precisionLen)
         std::cout << "f";
     
     std::cout << std::endl;
 }
 
-void    ScalarConverter::printDouble()
+void    ScalarConverter::printDouble(std::string input)
 {
-    double value = strtod(this->_input.c_str(), NULL);
+    double value = strtod(input.c_str(), NULL);
 
     std::cout << "double: " << (double) value << std::endl;
 }
 
-void    ScalarConverter::printValues()
+void    ScalarConverter::printValues(std::string input)
 {
-    if (validateInput() == false)
+    if (ScalarConverter::validateInput(input) == false)
     {
         throw NotNumberInputException();
     }
-
-    printChar();
-    printInt();
-    printFloat();
-    printDouble();   
+    printChar(input);
+    printInt(input);
+    printFloat(input);
+    printDouble(input);  
 }
 
 const char* ScalarConverter::NotNumberInputException::what() const throw()
