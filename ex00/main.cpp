@@ -12,7 +12,6 @@ int main(int argc, char **argv)
     try
     {
         ScalarConverter::printValues(argv[1]);
-
     }
     catch (const std::exception& e)
     {

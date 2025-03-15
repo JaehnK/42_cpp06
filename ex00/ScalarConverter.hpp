@@ -17,6 +17,8 @@ class ScalarConverter
         static bool            isNan;
 
         ScalarConverter();
+        ScalarConverter(ScalarConverter &rhs);
+        ScalarConverter &operator=(ScalarConverter &rhs);
         ~ScalarConverter();
 
         static bool    validateInput(std::string input);
@@ -26,7 +28,6 @@ class ScalarConverter
         static void    printDouble(std::string input);
     
     public:
-
         static void    printValues(std::string input);
 
         class NotNumberInputException:public std::exception

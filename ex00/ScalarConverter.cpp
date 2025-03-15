@@ -8,6 +8,12 @@ bool            ScalarConverter::isNan = false;
 ScalarConverter::ScalarConverter()
 {}
 
+ScalarConverter::ScalarConverter(ScalarConverter &rhs)
+{}
+
+ScalarConverter &ScalarConverter::operator=(ScalarConverter &rhs)
+{}
+
 ScalarConverter::~ScalarConverter()
 {}
 
